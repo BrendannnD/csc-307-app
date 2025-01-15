@@ -48,6 +48,16 @@ const addUser = (user) => {
     return user;
 };
 
+const deleteUser = (id) => {
+    users["users_list"].splice(id, 1);
+}
+
+const findUserByNameAndJob = (name, job) => {
+    return users["users_list"].filter(
+        (user) => user["name"] === name && user["job"] === job
+    )
+}
+
 app.use(express.json());
 
 app.post("/users", (req, res) => {
@@ -55,6 +65,12 @@ app.post("/users", (req, res) => {
     addUser(userToAdd);
     res.send();
 });
+
+app.delete("/users/:id", (req, res) => {
+    const id = req.params["id"];
+    deleteUser(id);
+    res.send();
+})
 
 app.get("/users/:id", (req, res) => {
     const id = req.params["id"]; //or req.params.id
@@ -68,8 +84,16 @@ app.get("/users/:id", (req, res) => {
 
 app.get("/users", (req, res) => {
     const name = req.query.name;
+    const job = req.query.job;
+    console.log(`Job is ${job}`)
+    console.log(`Name is ${name}`)
     if (name != undefined) {
-        let result = findUserByName(name);
+        let result = undefined;
+        if (job != undefined) {
+            result = findUserByNameAndJob(name,job);
+        } else {
+            result = findUserByName(name);
+        }
         result = { users_list: result };
         res.send(result);
     } else {
