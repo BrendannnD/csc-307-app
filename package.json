@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "npm -w packages/react-frontend run dev",
+    "dev": "concurrently \"npm -w packages/express-backend run dev\" \"npm -w packages/react-frontend run dev\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,5 +14,8 @@
   ],
   "devDependencies": {
     "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
   }
 }

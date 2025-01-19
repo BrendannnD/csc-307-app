@@ -1,5 +1,6 @@
 // backend.js
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
@@ -58,7 +59,10 @@ const findUserByNameAndJob = (name, job) => {
     )
 }
 
+app.use(cors());
+
 app.use(express.json());
+
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
@@ -85,8 +89,6 @@ app.get("/users/:id", (req, res) => {
 app.get("/users", (req, res) => {
     const name = req.query.name;
     const job = req.query.job;
-    console.log(`Job is ${job}`)
-    console.log(`Name is ${name}`)
     if (name != undefined) {
         let result = undefined;
         if (job != undefined) {
