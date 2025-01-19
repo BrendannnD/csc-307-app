@@ -50,7 +50,8 @@ const addUser = (user) => {
 };
 
 const deleteUser = (id) => {
-    users["users_list"].splice(id, 1);
+    const index = users["users_list"].findIndex(user => user.id === id);
+    return (users["users_list"].splice(index, 1).length > 0);
 }
 
 const findUserByNameAndJob = (name, job) => {
@@ -66,14 +67,22 @@ app.use(express.json());
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
+    if (userToAdd.id === undefined) {
+        userToAdd.id = Math.floor(Math.random()*1000000).toString();
+    }
     addUser(userToAdd);
-    res.send();
+    res.status(201).send(userToAdd);
 });
 
 app.delete("/users/:id", (req, res) => {
     const id = req.params["id"];
-    deleteUser(id);
-    res.send();
+    console.log("Attemping to delete user with id ", id);
+    const success = deleteUser(id);
+    if (success) {
+        res.status(204).send()
+    } else {
+        res.status(404).send()
+    }
 })
 
 app.get("/users/:id", (req, res) => {

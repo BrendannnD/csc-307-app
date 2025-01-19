@@ -12,12 +12,31 @@ function MyApp() {
         const updated = characters.filter((character, i) => {
             return i !== index;
         });
-        setCharacters(updated);
+        removeUser(characters[index].id)
+            .then((response) => {
+                if (response.status === 204) {
+                    setCharacters(updated);
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     function updateList(person) {
         postUser(person)
-            .then(() => setCharacters([...characters, person]))
+            .then((response) => {
+                if (response.status === 201) {
+                    return response.json();
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .then(data => {
+                setCharacters([...characters, data]);
+            })
             .catch((error) => {
                 console.log(error);
             })
@@ -35,6 +54,18 @@ function MyApp() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(person),
+        });
+
+        return promise;
+    }
+
+    function removeUser(id) {
+        const promise = fetch(`Http://localhost:8000/users/${id}`, {
+            method: "DELETE",
+            // headers: {
+            //     "Content-Type": "application/json",
+            // },
+            body: id
         });
 
         return promise;
