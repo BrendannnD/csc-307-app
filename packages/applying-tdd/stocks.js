@@ -8,11 +8,19 @@ class StockPortfolio {
         return this.tickers.size === 0;
     }
 
+    /*
+     NOTE: requirements do not describe intended functionality of negative amount.
+     Consider implementing if requirements change.
+     */
     purchase(symbol, amount) {
         this.tickers.add(symbol)
         this.amounts[symbol] = (this.amounts[symbol] || 0) + amount;
     }
 
+    /*
+     NOTE: requirements do not describe intended functionality of negative amount.
+     Consider implementing if requirements change.
+     */
     sell(symbol, amount) {
         if (this.amounts[symbol] >= amount) {
             this.amounts[symbol] = this.amounts[symbol] - amount
