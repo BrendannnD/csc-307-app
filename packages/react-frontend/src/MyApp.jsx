@@ -12,7 +12,7 @@ function MyApp() {
         const updated = characters.filter((character, i) => {
             return i !== index;
         });
-        removeUser(characters[index].id)
+        removeUser(characters[index]._id)
             .then((response) => {
                 if (response.status === 204) {
                     setCharacters(updated);
@@ -22,7 +22,7 @@ function MyApp() {
             })
             .catch((error) => {
                 console.log(error);
-            })
+            });
     }
 
     function updateList(person) {
@@ -48,7 +48,7 @@ function MyApp() {
     }
 
     function postUser(person) {
-        const promise = fetch("Http://localhost:8000/users", {
+        const promise = fetch("http://localhost:8000/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -60,12 +60,8 @@ function MyApp() {
     }
 
     function removeUser(id) {
-        const promise = fetch(`Http://localhost:8000/users/${id}`, {
+        const promise = fetch(`http://localhost:8000/users/${id}`, {
             method: "DELETE",
-            // headers: {
-            //     "Content-Type": "application/json",
-            // },
-            body: id
         });
 
         return promise;
@@ -76,8 +72,9 @@ function MyApp() {
 
     useEffect(() => {
         fetchUsers()
-            .then((res) => res.json())
-            .then((json) => setCharacters(json["users_list"]))
+            .then((res) =>
+                 res.json())
+            .then((json) => setCharacters(json))
             .catch((error) => { console.log(error); });
     }, [] );
 
